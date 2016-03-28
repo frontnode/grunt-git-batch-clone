@@ -49,6 +49,12 @@ Default value: `none`
 
 The location of your .json file that describes which git repos you want to clone and where they should go.
 
+#### options.configObject
+Type: `Object`
+Default value: `null`
+
+The optinal object instead of your .json file that describes which git repos you want to clone and where they should go (You can use either the configFile or the configObject to specify target repos).
+
 #### options.overWrite
 Type: `Boolean`
 Default value: `false`
@@ -80,6 +86,12 @@ Type: `Number`
 Default value: `0`
 
 Specifiy clone depth. 0 will recurse all the way down the tree.
+
+#### options.branch
+Type: `String`
+Default value: ``
+
+Specifiy clone branch. `` will clone the master branch by default.
 
 ### Usage Examples
 

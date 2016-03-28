@@ -35,23 +35,25 @@ module.exports = function(grunt) {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      configFile:'*EMPTY*',
-      postClone:'',
+      configFile: '*EMPTY*',
+      configObject: null,
+      postClone: '',
       overWrite: false,
       npmInstall: false,
       bowerInstall: false,
-      depth: 0
+      depth: 0,
+      branch: ''
     });
 
     // check if configFile option has been entered.
-    if(options.configFile === '*EMPTY*'){
-      grunt.log.warn('Please provide a configFile to batch-git-clone');
+    if(options.configFile === '*EMPTY*' && !options.configObject){
+      grunt.log.warn('Please provide a configFile or configObject to batch-git-clone');
       return false;
     }
 
     // check configFile Exists
-    if (!grunt.file.exists(options.configFile)) {
-      grunt.log.warn('Source file "' + options.configFile + '" not found.');
+    if (!grunt.file.exists(options.configFile) && !options.configObject) {
+      grunt.log.warn('Source file "' + options.configFile + '" not found, configObject is also not specified');
       return false;
     }
 
@@ -107,6 +109,10 @@ module.exports = function(grunt) {
 
       if(options.depth > 0){
         execString += ' --depth '+options.depth;
+      }
+
+      if(options.branch){
+        execString += ' --branch '+options.branch;
       }
 
       if(options.postClone !== ''){
@@ -274,7 +280,10 @@ module.exports = function(grunt) {
     }
 
     // read in the config file.
-    var config = grunt.file.readJSON(options.configFile);
+    var config = options.configObject;
+    if (options.configFile !== '*EMPTY*' && grunt.file.exists(options.configFile)) {
+      config = grunt.file.readJSON(options.configFile);
+    }
 
     // create an array of repos which included the path of each repo.
     // works recursively.
